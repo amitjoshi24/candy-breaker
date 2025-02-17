@@ -261,8 +261,8 @@ function draw() {
             newAngle += randomFactor;
         
             // Ensure total speed stays constant
-            const speed = Math.sqrt(dx * dx + dy * dy);
-        
+            //const speed = Math.sqrt(dx * dx + dy * dy);
+            const speed = Math.sqrt(18)
             // Convert the angle to new dx, dy
             const angleDx = speed * Math.sin(newAngle);
             const baseDx = dx;
@@ -271,6 +271,8 @@ function draw() {
         
             // Recalculate dy to maintain speed consistency
             dy = -Math.abs(Math.sqrt(speed * speed - dx * dx));
+
+            console.log(dx*dx + dy*dy)
         } else if (y + ballRadius > canvas.height) {
             // Reset ball position with a randomized direction but constant speed
             x = canvas.width / 2;
