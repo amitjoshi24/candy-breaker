@@ -251,22 +251,26 @@ function draw() {
         if (x > paddleX - ballRadius && x < paddleX + paddleWidth + ballRadius) {
             // Normalize hit position (-0.5 to 0.5), where -0.5 is the left edge and 0.5 is the right edge
             const hitPoint = (x - paddleX) / paddleWidth - 0.5;
-            
+        
             // Base angle adjustment based on hit position
             const maxAngle = Math.PI / 2; // 90 degrees max deviation
             let newAngle = hitPoint * maxAngle;
-    
+        
+            // Add slight randomness to the angle
+            const randomFactor = (Math.random() - 0.5) * (Math.PI / 18); // ±10° variation
+            newAngle += randomFactor;
+        
             // Ensure total speed stays constant
             const speed = Math.sqrt(dx * dx + dy * dy);
+        
             // Convert the angle to new dx, dy
-            angleDx = speed * Math.sin(newAngle);
-            baseDx = dx
-            dx = angleDx
-            //dx = (angleDx*3 + baseDx) / 4
-            //dx = baseDx
-            dy = -Math.abs(Math.sqrt(speed*speed - dx * dx));
-
-            // dy = -Math.abs(speed * Math.cos(newAngle)); // Always bounce upwards
+            const angleDx = speed * Math.sin(newAngle);
+            const baseDx = dx;
+            dx = angleDx;
+            // dx = (angleDx * 3 + baseDx) / 4; // Optional: blend with original dx
+        
+            // Recalculate dy to maintain speed consistency
+            dy = -Math.abs(Math.sqrt(speed * speed - dx * dx));
         } else if (y + ballRadius > canvas.height) {
             // Reset ball position with a randomized direction but constant speed
             x = canvas.width / 2;
