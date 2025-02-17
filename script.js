@@ -88,17 +88,29 @@ function collisionDetection() {
         for (let r = 0; r < brickRowCount; r++) {
             const b = bricks[c][r];
             if (b.status === 1) {
-                // Check for collision with the brick
-                if (x + ballRadius > b.x && x - ballRadius < b.x + brickWidth && y + ballRadius > b.y && y - ballRadius < b.y + brickHeight) {
-                    // Determine the side of collision
-                    const distX = Math.abs(x - (b.x + brickWidth / 2));
-                    const distY = Math.abs(y - (b.y + brickHeight / 2));
+                // Calculate previous position
+                const prevX = x - dx;
+                const prevY = y - dy;
 
-                    if (distX > distY) {
-                        dx = -dx; // Left or right collision
+                // Check if the ball is inside the brick *now*
+                const insideNow = x + ballRadius > b.x && x - ballRadius < b.x + brickWidth &&
+                                  y + ballRadius > b.y && y - ballRadius < b.y + brickHeight;
+                
+                // Check if the ball *wasn't* inside in the last frame
+                const insideBefore = prevX + ballRadius > b.x && prevX - ballRadius < b.x + brickWidth &&
+                                     prevY + ballRadius > b.y && prevY - ballRadius < b.y + brickHeight;
+
+                if (insideNow && !insideBefore) {  
+                    // Ball has moved into the brick → find the primary collision axis
+                    const overlapX = Math.min(x + ballRadius - b.x, b.x + brickWidth - (x - ballRadius));
+                    const overlapY = Math.min(y + ballRadius - b.y, b.y + brickHeight - (y - ballRadius));
+
+                    if (overlapX < overlapY) {
+                        dx = -dx; // Horizontal bounce
                     } else {
-                        dy = -dy; // Top or bottom collision
+                        dy = -dy; // Vertical bounce
                     }
+
                     b.status = 0;
                     score++;
                 }
@@ -106,6 +118,8 @@ function collisionDetection() {
         }
     }
 }
+
+
 
 function drawBall() {
     ctx.beginPath();
@@ -235,16 +249,39 @@ function draw() {
     } 
     if (y + ballRadius > canvas.height - paddleHeight) {
         if (x > paddleX - ballRadius && x < paddleX + paddleWidth + ballRadius) {
-            dy = -dy;
+            // Normalize hit position (-0.5 to 0.5), where -0.5 is the left edge and 0.5 is the right edge
+            const hitPoint = (x - paddleX) / paddleWidth - 0.5;
+            
+            // Base angle adjustment based on hit position
+            const maxAngle = Math.PI / 2; // 90 degrees max deviation
+            let newAngle = hitPoint * maxAngle;
+    
+            // Ensure total speed stays constant
+            const speed = Math.sqrt(dx * dx + dy * dy);
+            // Convert the angle to new dx, dy
+            angleDx = speed * Math.sin(newAngle);
+            baseDx = dx
+            dx = angleDx
+            //dx = (angleDx*3 + baseDx) / 4
+            //dx = baseDx
+            dy = -Math.abs(Math.sqrt(speed*speed - dx * dx));
+
+            // dy = -Math.abs(speed * Math.cos(newAngle)); // Always bounce upwards
         } else if (y + ballRadius > canvas.height) {
-            // Reset ball position but don't reload the page
+            // Reset ball position with a randomized direction but constant speed
             x = canvas.width / 2;
             y = canvas.height - 50;
-            dx = Math.abs(dx); // Make sure ball starts moving upward
-            dy = -Math.abs(dy);
+            //const speed = 3
+            const speed = Math.sqrt(dx * dx + dy * dy);
+            const angle = (Math.random() * Math.PI) / 4 + Math.PI / 4; // Random angle between 45° and 75°
+    
+            dx = (Math.random() > 0.5 ? 1 : -1) * speed * Math.cos(angle);
+            dy = -speed * Math.sin(angle); // Ensure upward motion
+    
             paddleX = (canvas.width - paddleWidth) / 2;
         }
     }
+    
 
     // Update paddle movement based on momentum setting
     if (momentumEnabled) {
