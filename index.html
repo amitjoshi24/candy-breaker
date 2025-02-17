@@ -1,0 +1,101 @@
+<head>
+    <meta charset="utf-8" />
+    <title>Candy Breaker Game</title>
+    <style>
+        * { padding: 0; margin: 0; }
+        canvas { 
+            background: #1a1a1a;  /* Dark background for the game */
+            display: block; 
+            margin: 20px auto 0;  /* Add 20px top margin */
+        }
+        body { 
+            background: #000000;  /* Black background for the page */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px;  /* Add padding to the top of the body */
+        }
+        #controls {
+            margin: 20px;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #FF6B6B;
+        }
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        .switch-label {
+            font-family: 'Arial', sans-serif;
+            font-size: 18px;
+            font-weight: bold;
+            color: #FF6B6B;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            transition: color 0.3s ease;
+            min-width: 140px;  /* Prevent layout shift when text changes */
+        }
+        input:checked ~ .switch-label {
+            color: #FF6B6B;
+        }
+        input:not(:checked) ~ .switch-label {
+            color: #ccc;
+        }
+        /* Add styles for the title */
+        .game-title {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            font-size: 48px;
+            color: #FF69B4;
+            text-align: center;
+            text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <h1 class="game-title">Candy-Breaker</h1>
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <div id="controls">
+        <span class="switch-label">Paddle Momentum: OFF</span>
+        <label class="switch">
+            <input type="checkbox" id="momentumToggle">
+            <span class="slider"></span>
+        </label>
+    </div>
+    <script src="script.js"></script>
+</body>
