@@ -257,7 +257,7 @@ function draw() {
             let newAngle = hitPoint * maxAngle;
         
             // Add slight randomness to the angle
-            const randomFactor = (Math.random() - 0.5) * (Math.PI / 18); // ±10° variation
+            const randomFactor = (Math.random() - 0.5) * (Math.PI / 180); // ±1° variation
             newAngle += randomFactor;
         
             // Ensure total speed stays constant
