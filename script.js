@@ -299,15 +299,16 @@ function draw() {
             // Reset ball position with a randomized direction but constant speed
             x = canvas.width / 2;
             y = canvas.height - 50;
-            //const speed = 3
+        
             const speed = Math.sqrt(dx * dx + dy * dy);
-            const angle = (Math.random() * Math.PI) / 4 + Math.PI / 4; // Random angle between 45° and 75°
-    
-            dx = (Math.random() > 0.5 ? 1 : -1) * speed * Math.cos(angle);
+            const angle = (Math.random() * Math.PI / 2) + Math.PI / 4; // Random angle between 45° and 135° (inclusive)
+            const angleInDegrees = angle * 180 / Math.PI;
+            //console.log(angleInDegrees)
+            dx = speed * Math.cos(angle);  // Direction is now handled by the angle
             dy = -speed * Math.sin(angle); // Ensure upward motion
-    
+        
             paddleX = (canvas.width - paddleWidth) / 2;
-        }
+        }        
     }
     
 
