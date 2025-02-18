@@ -83,26 +83,27 @@ function keyUpHandler(e) {
     }
 }
 
-document.addEventListener("touchstart", touchHandler, false);
-document.addEventListener("touchmove", touchHandler, false);
-document.addEventListener("touchend", touchEndHandler, false);
+canvas.addEventListener("touchstart", touchHandler, { passive: false });
+canvas.addEventListener("touchmove", touchHandler, { passive: false });
+canvas.addEventListener("touchend", touchEndHandler, { passive: false });
 
 function touchHandler(e) {
-    e.preventDefault(); // Prevent scrolling when touching the game
+    e.preventDefault(); // Prevents scrolling and zooming
     let touch = e.touches[0];
     let touchX = touch.clientX - canvas.getBoundingClientRect().left;
 
-    // Move paddle based on touch position
     if (touchX > 0 && touchX < canvas.width) {
         paddleX = touchX - paddleWidth / 2;
     }
 }
 
-function touchEndHandler() {
-    // Stop paddle movement when touch ends (optional)
+function touchEndHandler(e) {
+    e.preventDefault(); // Prevent unintended scrolling
+    // Stop paddle movement when touch ends
     rightPressed = false;
     leftPressed = false;
 }
+
 
 function collisionDetection() {
     for (let c = 0; c < brickColumnCount; c++) {
