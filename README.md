@@ -11,6 +11,7 @@ A candy-themed brick breaker game built with vanilla JavaScript and HTML5 Canvas
 
 ## How to Play
 - Use LEFT and RIGHT arrow keys to move the paddle
+- Touch the screen to move the paddle if playing on a mobile device
 - Break all the candy bricks to progress to the next level
 - Don't let the ball fall below the paddle
 - Try to get the highest score possible!
