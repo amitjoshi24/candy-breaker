@@ -1,4 +1,4 @@
-# Candy Breaker Game
+# Candy Breaker
 
 A candy-themed brick breaker game built with vanilla JavaScript and HTML5 Canvas.
 
